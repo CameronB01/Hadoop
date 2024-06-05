@@ -48,33 +48,12 @@ mkdir app/jars
 
 8. Fetch data to app/data
 
-'hello world' for 'map reduce' is 'word count' so we get some words to count. I got two of my favorite books and also Wuthering Heights from Project Gutenberg in plaintext format like so:
-
 ```
 cd /app/data
 curl https://www.gutenberg.org/cache/epub/1342/pg1342.txt -o austen.txt
 curl https://www.gutenberg.org/cache/epub/84/pg84.txt -o shelley.txt
 curl https://www.gutenberg.org/cache/epub/768/pg768.txt -o bronte.txt
 ```
-
-It should be easy enough to find other text files on the Internet, but I used these three. Before going further, I verified that I had files of some size:
-
-```
-ls -al
-```
-
-I got: 
-
-```
-total 1884
-drwxr-xr-x 2 root root   4096 May 28 19:42 .
-drwxr-xr-x 5 root root   4096 May 28 19:38 ..
--rw-r--r-- 1 root root 772420 May 28 19:41 austen.txt
--rw-r--r-- 1 root root 693877 May 28 19:42 bronte.txt
--rw-r--r-- 1 root root 448937 May 28 19:42 shelley.txt
-```
-
-The byte size is between the second "root" and the date - and all three are nonzero and similarish in size (as each is a novel).
 
 9. Fetch compute to app/jars
 
