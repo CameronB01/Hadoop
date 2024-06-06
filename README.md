@@ -37,8 +37,6 @@ docker exec -it docker-hadoop-namenode-1 /bin/bash
 
 7. Set up the node
 
-While within the node, we will need directories for data, for compute, and for results. I created those under a new 'app' directory.
-
 ```
 mkdir app
 mkdir app/data
@@ -57,26 +55,12 @@ curl https://www.gutenberg.org/cache/epub/768/pg768.txt -o bronte.txt
 
 9. Fetch compute to app/jars
 
-We are using WordCount.jar, which is helpfully provided by somebody, but most critically is in the repo. We can grab from the local file system (boring) or we just curl again:
-
 ```
 cd /app/jars
 curl https://github.com/wxw-matt/docker-hadoop/blob/master/jobs/jars/WordCount.jar -o WordCounter.jar
 ```
 
-In general, you should not just pull executable files off of the internet and run them, but we are running this in a container, which provides a modicum of safety.
-
-If you don't/can't/won't do a curl, you just take the local jar, though you'll have to drop out of the container to grab it (unless there's some docker commands I don't know).
-
-```
-docker cp .\jobs\jars\WordCount.jar namenode:/app/jars/WordCount.jar
-```
-
 10. Load data in HDFS
-
-Hadoop can only read and write to something called the Hadoop Distributed File System, which is a very fancy hash table that works well in data centers.
-
-We need to move data from the Linux file system into the Hadoop file system. We use the "hdfs" commands.
 
 ```
 cd /
@@ -95,8 +79,6 @@ hadoop jar jars/WordCount.jar WordCount /test-1-input /test-1-output
 ```
 hdfs dfs -copyToLocal /test-1-output /app/res/
 ```
-
-13. See the results!
 
 ```
 cat /app/res/test-1-output/part-r-00000
