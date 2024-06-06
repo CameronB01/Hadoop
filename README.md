@@ -82,8 +82,3 @@ hdfs dfs -copyToLocal /test-1-output /app/res/
 
 
 I did not get this to work...
-
-
-```
-cat /app/res/test-1-output/part-r-00000
-```
