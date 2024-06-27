@@ -18,65 +18,57 @@
 # To run this example use
 # ./bin/spark-submit examples/src/main/r/dataframe.R
 
-import sys
-from random import random
-from operator import add
 
 from pyspark.sql import SparkSession
 
 
 # Initialize SparkSession
 
-if __name__ == "__main__":
-    """
-        Usage: pi [partitions]
-    """
-    spark = SparkSession\
-        .builder\
-        .appName("PythonDataframe")\
-        .getOrCreate()
+spark = SparkSession.builder.appName("PySpark-DataFrame-example").getOrCreate()
 
 # sparkR.session(appName = "SparkR-DataFrame-example")
 
 # Create a simple local data.frame
 
-data = [{"Category": 'A', "ID": 1, "Value": 121.44, "Truth": True},
-        {"Category": 'B', "ID": 2, "Value": 300.01, "Truth": False},
-        {"Category": 'C', "ID": 3, "Value": 10.99, "Truth": None},
-        {"Category": 'E', "ID": 4, "Value": 33.87, "Truth": True}
-        ]
+local_data = [("John", 19), ("Smith", 23), ("Sarah", 18)]
+localDF = spark.createDataFrame(local_data, ["name", "age"])
 
+localDF.printSchema()
 
-localDF <- data.frame(name=c("John", "Smith", "Sarah"), age=c(19, 23, 18))
-
-# Convert local data frame to a SparkDataFrame
-df <- createDataFrame(localDF)
-
-# Print its schema
-printSchema(df)
 # root
 #  |-- name: string (nullable = true)
 #  |-- age: double (nullable = true)
 
 # Create a DataFrame from a JSON file
-path <- file.path(Sys.getenv("SPARK_HOME"), "examples/src/main/resources/people.json")
-peopleDF <- read.json(path)
-printSchema(peopleDF)
+path = "examples/src/main/resources/people.json"
+peopleDF = spark.read.json(path)
+peopleDF.printSchema()
+
+# path <- file.path(Sys.getenv("SPARK_HOME"), "examples/src/main/resources/people.json")
+# peopleDF <- read.json(path)
+# printSchema(peopleDF)
 # root
 #  |-- age: long (nullable = true)
 #  |-- name: string (nullable = true)
 
 # Register this DataFrame as a table.
-createOrReplaceTempView(peopleDF, "people")
+peopleDF.createOrReplaceTempView("people")
+
+# createOrReplaceTempView(peopleDF, "people")
 
 # SQL statements can be run by using the sql methods
-teenagers <- sql("SELECT name FROM people WHERE age >= 13 AND age <= 19")
+teenagers = spark.sql("SELECT name FROM people WHERE age >= 13 AND age <= 19")
+
+# teenagers <- sql("SELECT name FROM people WHERE age >= 13 AND age <= 19")
 
 # Call collect to get a local data.frame
-teenagersLocalDF <- collect(teenagers)
+teenagersLocalDF = teenagers.collect()
+
+# teenagersLocalDF <- collect(teenagers)
 
 # Print the teenagers in our dataset
-print(teenagersLocalDF)
+for row in teenagersLocalDF:
+    print(row)
 
 # Stop the SparkSession now
-sparkR.session.stop()
+spark.stop()
