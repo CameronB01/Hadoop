@@ -72,3 +72,6 @@ for row in teenagersLocalDF:
 
 # Stop the SparkSession now
 spark.stop()
+
+# Output
+My terminal output was: Row(name='Justin')
