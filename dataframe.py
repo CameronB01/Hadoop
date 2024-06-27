@@ -40,7 +40,7 @@ localDF.printSchema()
 #  |-- age: double (nullable = true)
 
 # Create a DataFrame from a JSON file
-path = "people.json"
+path = "https://raw.githubusercontent.com/apache/spark/master/examples/src/main/resources/people.json"
 peopleDF = spark.read.json(path)
 peopleDF.printSchema()
 
