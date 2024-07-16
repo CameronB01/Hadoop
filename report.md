@@ -2,21 +2,21 @@
 
 ## Introduction
 
-In this study, we aim to explore the differences in the usage frequencies of feminine and masculine personal pronouns in a given corpus. Specifically, we seek to determine whether there is a statistically significant difference between the frequencies of these pronouns when used as subjects versus objects. Additionally, we investigate whether the gender distribution of the authors within the corpus has a meaningful impact on these results.
+In this study, we aim to explore the differences in the usage frequencies of feminine and masculine personal pronouns in a given corpus. Specifically, we will be looking at two Charles Dickens novels: A Tale of Two Cities and Great Expectations. We will determine whether there is a statistically significant difference between the frequencies of these pronouns when used as subjects versus objects. Additionally, we investigate whether the gender distribution of the authors within the corpus has a meaningful impact on these results.
 
 ## Methodology
 
 ### Dataset
 
-We use a corpus of news articles that contain metadata including the text of the article, the authors, and their genders. This dataset allows us to analyze the usage of personal pronouns in different contexts and correlate these findings with the gender of the authors.
+We used a small sample of novels from Charles and this will allow us to analyze the usage of personal pronouns in different contexts.
 
 ### Technologies
 
 To process and analyze the text data, we use the following tools and technologies:
 
 - **SparkNLP**: An open-source library that provides state-of-the-art natural language processing capabilities.
-- **Pandas**: A Python library used for data manipulation and analysis.
-- **Matplotlib**: A plotting library for creating static, animated, and interactive visualizations in Python.
+- **Matplotlib**: A plotting library for creating visualizations in Python.
+- **Scipy**: A popular statistical package in Python.
 
 ## Hypothesis
 
