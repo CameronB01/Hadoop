@@ -125,7 +125,7 @@ else:
 
 
 ## Source Code For Louisa May Alcott Example (This is basically the exact same as above with the books and some variable names switched)
-```{python}
+```python
 # Import packages
 !wget http://setup.johnsnowlabs.com/colab.sh -O - | bash
 import sparknlp
