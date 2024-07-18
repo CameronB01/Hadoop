@@ -20,7 +20,7 @@ To process and analyze the text data, we use the following tools and technologie
 
 ## Hypothesis
 
-1. **Null Hypothesis**: There is not a statistically significant difference in the frequencies of feminine and masculine personal pronouns used as subjects versus objects.
+**Null Hypothesis**: There is not a statistically significant difference in the frequencies of feminine and masculine personal pronouns used as subjects versus objects.
 
 ## Evaluation
 
@@ -36,7 +36,7 @@ Becuase our p-value is less than 0.05, we can reject the null hypothesis and con
 
 
 ## Source code for Charles Dickens Example
-```{python}
+```python
 # Import packages
 !wget http://setup.johnsnowlabs.com/colab.sh -O - | bash
 import sparknlp
