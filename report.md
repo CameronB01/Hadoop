@@ -35,7 +35,7 @@ Becuase our p-value is less than 0.05, we can reject the null hypothesis and con
 Becuase our p-value is less than 0.05, we can reject the null hypothesis and conclude that there is a statistically significant difference between the groups. This result suggests that the usage of feminine and masculine personal pronouns as subjects versus objects is not equal, pointing to potential patterns or biases in pronoun usage.
 
 
-## Source code for Charles Dickens Example
+## Source code for Charles Dickens Example (runtime: 12:25)
 ```python
 # Import packages
 !wget http://setup.johnsnowlabs.com/colab.sh -O - | bash
