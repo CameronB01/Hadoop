@@ -32,3 +32,188 @@ We use SparkNLP to preprocess the text data, identify personal pronouns, and cat
 1. **Tokenization**: Splitting the text into individual words.
 2. **Part-of-Speech Tagging**: Identifying the grammatical role of each word in the sentence.
 3. **Pronoun Extraction**: Extracting and categorizing personal pronouns as subjects or objects.
+
+
+## Source code for Charles Dickens Example
+```{python}
+# Import packages
+!wget http://setup.johnsnowlabs.com/colab.sh -O - | bash
+import sparknlp
+spark = sparknlp.start()
+from sparknlp.pretrained import PretrainedPipeline
+from tqdm import tqdm
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set_theme()
+import scipy.stats as stats
+
+pipeline = PretrainedPipeline("explain_document_ml")
+
+# Download books
+!curl "https://www.gutenberg.org/cache/epub/98/pg98.txt" -o dickens1.txt
+!curl "https://www.gutenberg.org/cache/epub/1400/pg1400.txt" -o dickens2.txt
+
+# Read in books and concatenate
+louisa1 = open('dickens1.txt').read()
+louisa2 = open('dickens2.txt').read()
+
+all_male_authros = dickens1 + dickens2
+
+# Split into sentences
+male_sentences = all_male_authros.split(".")
+
+# Annotate
+male_dfs = [pipeline.annotate(hl) for hl in tqdm(male_sentences)]
+
+male_tok_tag = [(df['token'],df['pos']) for df in male_dfs]
+male_zips = [list(zip(tt[0], tt[1])) for tt in male_tok_tag]
+
+# This function takes a list of sentences, where each sentence is a list of words with their corresponding part-of-speech tags. It counts the occurrences of feminine and masculine pronouns used as subjects and objects.
+def get_gender(text):
+  feminine_subjects = 0
+  feminine_objects = 0
+  masculine_subjects = 0
+  masculine_objects = 0
+
+  for sentence in text:
+    for word in sentence:
+      token = word[0].rstrip('\n')
+      if token.lower() == "she" and word[1] == "PRP":
+          feminine_subjects += 1
+      elif token.lower() == "her" and word[1] == "PRP":
+          feminine_objects += 1
+      elif token.lower() == "he" and word[1] == "PRP":
+          masculine_subjects += 1
+      elif token.lower() == "him" and word[1] == "PRP":
+          masculine_objects += 1
+      else:
+        pass
+
+  print("Feminine Subjects: " + str(feminine_subjects))
+  print("Feminine Objects: " + str(feminine_objects))
+  print("Masculine Subjects: " + str(masculine_subjects))
+  print("Masculine Objects: " + str(masculine_objects))
+
+  return feminine_subjects, masculine_subjects, feminine_objects, masculine_objects
+
+feminine_subjects, masculine_subjects, feminine_objects, masculine_objects = get_gender(male_zips)
+
+# Plot counts
+sns.barplot(x=['F_Subject', 'M_Subject', 'F_Object', 'M_Object'], y=[feminine_subjects, masculine_subjects, feminine_objects, masculine_objects])
+plt.title('Subject and Object Frequency Comparison')
+plt.ylabel('Frequency')
+plt.xlabel('Gender and POS')
+plt.show()
+
+# See if the different counts are statistically significant
+observed = [[feminine_subjects, feminine_objects], [masculine_subjects, masculine_objects]]
+
+chi2, p, dof, expected = stats.chi2_contingency(observed)
+
+print(f"Chi-square statistic: {chi2}")
+print(f"P-value: {p}")
+print(f"Degrees of freedom: {dof}")
+print("Expected frequencies:")
+print(expected)
+
+if p < 0.05:
+    print("There is a significant difference between the frequencies.")
+else:
+    print("There is no significant difference between the frequencies.")
+```
+
+
+## Source Code For Louisa May Alcott Example
+```{python}
+# Import packages
+!wget http://setup.johnsnowlabs.com/colab.sh -O - | bash
+import sparknlp
+spark = sparknlp.start()
+from sparknlp.pretrained import PretrainedPipeline
+from tqdm import tqdm
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set_theme()
+import scipy.stats as stats
+
+pipeline = PretrainedPipeline("explain_document_ml")
+
+# Download books
+!curl "https://www.gutenberg.org/cache/epub/37106/pg37106.txt" -o louisa1.txt
+!curl "https://www.gutenberg.org/cache/epub/2787/pg2787.txt" -o louisa2.txt
+
+# Read in books and concatenate
+louisa1 = open('louisa1.txt').read()
+louisa2 = open('louisa2.txt').read()
+
+all_female_authros = louisa1 + louisa2
+
+# Split into sentences
+female_sentences = all_female_authros.split(".")
+
+# Annotate
+female_dfs = [pipeline.annotate(hl) for hl in tqdm(female_sentences)]
+
+fem_tok_tag = [(df['token'],df['pos']) for df in female_dfs]
+fem_zips = [list(zip(tt[0], tt[1])) for tt in fem_tok_tag]
+
+# This function takes a list of sentences, where each sentence is a list of words with their corresponding part-of-speech tags. It counts the occurrences of feminine and masculine pronouns used as subjects and objects.
+def get_gender(text):
+  feminine_subjects = 0
+  feminine_objects = 0
+  masculine_subjects = 0
+  masculine_objects = 0
+
+  for sentence in text:
+    for word in sentence:
+      token = word[0].rstrip('\n')
+      if token.lower() == "she" and word[1] == "PRP":
+          feminine_subjects += 1
+      elif token.lower() == "her" and word[1] == "PRP":
+          feminine_objects += 1
+      elif token.lower() == "he" and word[1] == "PRP":
+          masculine_subjects += 1
+      elif token.lower() == "him" and word[1] == "PRP":
+          masculine_objects += 1
+      else:
+        pass
+
+  print("Feminine Subjects: " + str(feminine_subjects))
+  print("Feminine Objects: " + str(feminine_objects))
+  print("Masculine Subjects: " + str(masculine_subjects))
+  print("Masculine Objects: " + str(masculine_objects))
+
+  return feminine_subjects, masculine_subjects, feminine_objects, masculine_objects
+
+feminine_subjects, masculine_subjects, feminine_objects, masculine_objects = get_gender(fem_zips)
+
+# Plot counts
+sns.barplot(x=['F_Subject', 'M_Subject', 'F_Object', 'M_Object'], y=[feminine_subjects, masculine_subjects, feminine_objects, masculine_objects])
+plt.title('Subject and Object Frequency Comparison')
+plt.ylabel('Frequency')
+plt.xlabel('Gender and POS')
+plt.show()
+
+# See if the different counts are statistically significant
+observed = [[feminine_subjects, feminine_objects], [masculine_subjects, masculine_objects]]
+
+chi2, p, dof, expected = stats.chi2_contingency(observed)
+
+print(f"Chi-square statistic: {chi2}")
+print(f"P-value: {p}")
+print(f"Degrees of freedom: {dof}")
+print("Expected frequencies:")
+print(expected)
+
+if p < 0.05:
+    print("There is a significant difference between the frequencies.")
+else:
+    print("There is no significant difference between the frequencies.")
+
+```
+
+
+
+
+
+
